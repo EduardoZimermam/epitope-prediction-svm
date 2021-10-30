@@ -1,8 +1,7 @@
-
 import sys
 
 from utils.setup_logger import logger
-
+from time import time
 
 class File():
     """ Classe para manipulação de arquivos"""
@@ -11,9 +10,11 @@ class File():
         pass
 
     def get_sequences_from_file(self, seq_file: str) -> list:
-        """ Retorna uma lista de peptídeos a partir do arquivo enviado como parâmetro"""
+        """ Retorna uma lista de peptídeos em upper case a partir do arquivo enviado como parâmetro"""
 
-        logger.debug(f"Iniciando a leitura das sequências de peptídeos do arquivo: {seq_file}")
+        logger.info(f"Iniciando a leitura das sequências de peptídeos do arquivo: {seq_file}")
+
+        time_init = time()
 
         file = None
         sequences = []
@@ -25,8 +26,11 @@ class File():
             sys.exit()
 
         for line in file.readlines():
-            sequences.append(line)
+            sequences.append(line.strip().upper())
 
-        logger.debug(f"Finalizada a leitura das sequências de peptídeos do arquivo: {seq_file}")
-        
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para ler todas as sequências do arquivo {seq_file}: {time_end - time_init} segundos")
+        logger.info(f"Finalizada a leitura das sequências de peptídeos do arquivo: {seq_file}")
+
         return sequences
