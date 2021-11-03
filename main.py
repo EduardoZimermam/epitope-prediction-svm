@@ -1,4 +1,4 @@
-from classes.features import AAT
+from classes.features import AAP, AAT
 from classes.command_line import Cli
 from classes.file import File
 from utils.setup_logger import logger
@@ -33,8 +33,16 @@ if __name__=='__main__':
     # Inicializa a classe AAT
     aat = AAT()
 
+    # Inicializa a classe AAP
+    aap = AAP()
+
     # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
     aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
+
+    # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
+    # aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
+
+    print(aat_scale)
 
     time_end = time()
 
