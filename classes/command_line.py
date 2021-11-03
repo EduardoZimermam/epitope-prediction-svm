@@ -15,6 +15,9 @@ class Cli():
 
         ap.add_argument("-n", "--negative-file", required=True,
             help="Caminho completo para o arquivo que contém as sequências de aminoácido negativas")
+
+        ap.add_argument("-d", "--dataset-name", required=True,
+            help="Nome do dataset que está sendo usado para realizar o treinamento do modelo")
       
         args = vars(ap.parse_args())
 

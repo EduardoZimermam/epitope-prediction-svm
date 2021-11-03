@@ -21,6 +21,9 @@ if __name__=='__main__':
     positive_file = cli.get_arg_from_cli('positive_file')
     negative_file = cli.get_arg_from_cli('negative_file')
 
+    # Nome do dataset para salvar os dicionários de antigenicidade
+    dataset_name = cli.get_arg_from_cli('dataset_name')
+
     # Realização da leitura dos arquivos com as sequências de peptídeos
     positive_sequences = file_handler.get_sequences_from_file(positive_file)
     negative_sequences = file_handler.get_sequences_from_file(negative_file)
@@ -40,9 +43,7 @@ if __name__=='__main__':
     aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
 
     # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
-    # aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
-
-    print(aat_scale)
+    aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
 
     time_end = time()
 
