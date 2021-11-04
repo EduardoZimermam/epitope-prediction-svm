@@ -38,15 +38,20 @@ if __name__=='__main__':
 
     feature_list = []
 
+    dataset = positive_sequences + negative_sequences
+
     if cli.get_arg_from_cli('aat_feature'):
 
         # Guarda o path completo para o arquivo
         path_to_file = f"scale/{dataset_name}/aat_scale.txt"
+            
+        # Inicializa a classe AAT
+        aat = AAT()
         
         # Testa se o arquivo já existe, se sim, abre o arquivo, se não, salva o arquivo para que não precise ser gerado novamente se necessário
         if not exists(path_to_file):
-            # Inicializa a classe AAT
-            aat = AAT()
+
+            logger.info(f"Dicionário AAT para o dataset {dataset_name} não existe!")
 
             # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
             aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
@@ -54,8 +59,14 @@ if __name__=='__main__':
             # Salva escala gerada em um arquivo
             file_handler.save_dict_in_file(path_to_file, aat_scale)
         else:
+
+            logger.info(f"Dicionário AAT para o dataset {dataset_name} já existe, será lido do arquivo!")
+
             # Caso o arquivo já exista é realizada a leitura da escala já calculada
             aat_scale = file_handler.transform_file_in_dict(path_to_file)
+
+        # Extração da feature aat para cada peptídeo do dataset
+        aat_feature = aat.extract_aat_feature(dataset, aat_scale)
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aat')
@@ -65,10 +76,13 @@ if __name__=='__main__':
         # Guarda o path completo para o arquivo
         path_to_file = f"scale/{dataset_name}/aap_scale.txt"
 
+        # Inicializa a classe AAP
+        aap = AAP()
+
         # Testa se o arquivo já existe, se sim, abre o arquivo, se não, salva o arquivo para que não precise ser gerado novamente se necessário
         if not exists(path_to_file):
-             # Inicializa a classe AAP
-            aap = AAP()
+
+            logger.info(f"Dicionário AAP para o dataset {dataset_name} não existe!")
 
             # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
             aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
@@ -76,8 +90,14 @@ if __name__=='__main__':
             # Salva a escala gerada em um arquivo
             file_handler.save_dict_in_file(path_to_file, aap_scale)
         else:
+
+            logger.info(f"Dicionário AAP para o dataset {dataset_name} já existe, será lido do arquivo!")
+            
             # Caso o arquivo já exista é realizada a leitura da escala já calculada
             aap_scale = file_handler.transform_file_in_dict(path_to_file)
+
+        # Extração da feature aap para cada peptídeo do dataset
+        aap_feature = aap.extract_aap_feature(dataset, aap_scale)
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aap')

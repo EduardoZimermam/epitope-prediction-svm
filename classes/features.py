@@ -109,6 +109,50 @@ class AAT():
         
         return aat_scale
 
+    def extract_aat_feature(self, dataset: list, aat_scale: dict) -> list:
+        """ Extraí a feature AAT para todo o dataset"""
+
+        logger.info("Iniciando o calculo para extração da feature AAT do dataset")
+
+        time_init = time()
+        
+        # Inicialização das variáveis para extrair a feature
+        avg_aat = 0.0
+        feature_list = []
+
+        # Para cada peptídeo no dataset será realizada a extração da feature
+        for peptideo in dataset:
+
+            # Inicialização das variáveis para realizar o cálculo da média depois
+            score = 0
+            count = 0
+
+            # Iteração da sequência em uma janela deslizante de tamanho 3
+            for i in range(0, len(peptideo) - 2):
+                try:
+                    # Coleta o cálculo da escala de antigenicidade para determinada combinação de 3 aminoácidos.
+                    score += float(aat_scale[peptideo[i:i + 3]])
+                    count += 1
+                except KeyError:
+                    logger.error(f"A key {aat_scale[peptideo[i:i + 3]]} não existe!")
+                    continue
+            
+            # Caso exista um problema e o count é diferente de 0 é realizado o cálculo da média, caso contrário a média é 0
+            if count != 0:
+                avg_aat = score / count
+            else:
+                avg_aat = 0
+
+            # Adiciona a média calculada para a sequência na lista de cálculos do dataset
+            feature_list.append(avg_aat)
+        
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para extrair a feature AAT do dataset: {time_end - time_init} segundos")
+        logger.info("Finalizado o cálculo da feature AAT para o dataset.")
+
+        return feature_list
+
 class AAP():
     """ Classe Amino Acid Pair (AAP)"""
 
@@ -212,3 +256,47 @@ class AAP():
         logger.info("Finalizada a geração da escala de antigenicidade em pares dos aminoácidos.")
         
         return aap_scale
+
+    def extract_aap_feature(self, dataset: list, aap_scale: dict) -> list:
+        """ Extraí a feature AAP para todo o dataset"""
+
+        logger.info("Iniciando o calculo para extração da feature AAP do dataset")
+
+        time_init = time()
+        
+        # Inicialização das variáveis para extrair a feature
+        avg_aap = 0.0
+        feature_list = []
+
+        # Para cada peptídeo no dataset será realizada a extração da feature
+        for peptideo in dataset:
+
+            # Inicialização das variáveis para realizar o cálculo da média depois
+            score = 0
+            count = 0
+
+            # Iteração da sequência em uma janela deslizante de tamanho 2
+            for i in range(0, len(peptideo) - 1):
+                try:
+                    # Coleta o cálculo da escala de antigenicidade para determinada combinação de 2 aminoácidos.
+                    score += float(aap_scale[peptideo[i:i + 2]])
+                    count += 1
+                except KeyError:
+                    logger.error(f"A key {aap_scale[peptideo[i:i + 2]]} não existe!")
+                    continue
+            
+            # Caso exista um problema e o count é diferente de 0 é realizado o cálculo da média, caso contrário a média é 0
+            if count != 0:
+                avg_aap = score / count
+            else:
+                avg_aap = 0
+
+            # Adiciona a média calculada para a sequência na lista de cálculos do dataset
+            feature_list.append(avg_aap)
+        
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para extrair a feature AAP do dataset: {time_end - time_init} segundos")
+        logger.info("Finalizado o cálculo da feature AAP para o dataset.")
+
+        return feature_list
