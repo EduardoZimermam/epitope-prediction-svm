@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 import sys
 
 from utils.setup_logger import logger
@@ -36,7 +35,7 @@ class File():
 
         return sequences
 
-    def save_file(self, path_to_save: str, content_to_save: NoneType) -> None:
+    def save_file(self, path_to_save: str, content_to_save) -> None:
         """ Salva o conteúdo passado como parâmetro no path enviado como parâmetro"""
 
         logger.info(f"Iniciando o processo de salvamento do conteúdo passado em: {path_to_save}")

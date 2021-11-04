@@ -18,6 +18,12 @@ class Cli():
 
         ap.add_argument("-d", "--dataset-name", required=True,
             help="Nome do dataset que está sendo usado para realizar o treinamento do modelo")
+        
+        ap.add_argument("-at", "--aat-feature", action='store_true',
+            help="Quando esse parâmetro está selecionado será utilizada a feature AAT (Amino Acid Triplets)")
+        
+        ap.add_argument("-ap", "--aap-feature", action='store_true',
+            help="Quando esse parâmetro está selecionado será utilizada a feature AAP (Amino Acid Pair)")
       
         args = vars(ap.parse_args())
 
@@ -35,4 +41,4 @@ class Cli():
         except NameError:
             logger.error("Argumento não encontrado!")
 
-        return arg_value.strip()
+        return arg_value.strip() if type(arg_value) == str else arg_value 

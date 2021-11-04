@@ -5,6 +5,8 @@ from utils.setup_logger import logger
 
 from time import time
 
+import sys
+
 # Definição para inicializar a Interface de linha de comando
 cli = Cli()
 
@@ -33,17 +35,31 @@ if __name__=='__main__':
     del positive_file
     del negative_file
 
-    # Inicializa a classe AAT
-    aat = AAT()
+    feature_list = []
 
-    # Inicializa a classe AAP
-    aap = AAP()
+    if cli.get_arg_from_cli('aat_feature'):
+        # Inicializa a classe AAT
+        aat = AAT()
 
-    # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
-    aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
+        # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
+        aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
 
-    # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
-    aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
+        # Salvando a feature que será utilizada para treinar o modelo
+        feature_list.append('aat')
+    
+    if cli.get_arg_from_cli('aap_feature'):
+         # Inicializa a classe AAP
+        aap = AAP()
+
+        # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
+        aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
+
+        # Salvando a feature que será utilizada para treinar o modelo
+        feature_list.append('aap')
+
+    if not len(feature_list):
+        logger.error("Não foi selecionada nenhuma feature para treinamento do modelo. Programa será encerrado!")
+        sys.exit()
 
     time_end = time()
 
