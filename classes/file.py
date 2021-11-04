@@ -75,3 +75,27 @@ class File():
 
         logger.debug(f"Tempo gasto em segundos para escrever o arquivo {path_to_save}: {time_end - time_init} segundos")
         logger.info(f"Finalizada a escrita no arquivo: {path_to_save}")
+
+    def transform_file_in_dict(self, path_to_file: str) -> dict:
+        """ Busca um arquivo e retorna o conteúdo como um dict"""
+
+        logger.info(f"Iniciando o processo para recuperar o conteúdo do arquivo{path_to_file}")
+
+        time_init = time()
+
+        file = None
+
+        try:
+            file = open(path_to_file, 'r')
+        except FileNotFoundError as e:
+            logger.error(f"Houve um erro ao tentar acessar o arquivo em: \"{path_to_file}\"")
+            sys.exit()
+
+        content = json.load(file)
+        
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para recuperar o conteúdo do arquivo {path_to_file}: {time_end - time_init} segundos")
+        logger.info(f"Finalizada leitura do conteúdo do arquivo: {path_to_file}")
+
+        return content
