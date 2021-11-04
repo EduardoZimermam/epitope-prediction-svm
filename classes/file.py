@@ -1,4 +1,7 @@
 import sys
+import json
+import os
+import errno
 
 from utils.setup_logger import logger
 from time import time
@@ -35,7 +38,7 @@ class File():
 
         return sequences
 
-    def save_file(self, path_to_save: str, content_to_save) -> None:
+    def save_dict_in_file(self, path_to_save: str, content_to_save: dict) -> None:
         """ Salva o conteúdo passado como parâmetro no path enviado como parâmetro"""
 
         logger.info(f"Iniciando o processo de salvamento do conteúdo passado em: {path_to_save}")
@@ -44,17 +47,29 @@ class File():
 
         file = None
 
+        # Verifica se precisa criar o diretório antes de salvar o arquivo
+        if not os.path.exists(os.path.dirname(path_to_save)):
+            try:
+                # Cria o diretório para salvar o arquivo se necessário
+                os.makedirs(os.path.dirname(path_to_save))
+            except OSError as exc: # Guarda contra condições de corrida
+                if exc.errno != errno.EEXIST:
+                    raise
+
         try:
             file = open(path_to_save, 'w+')
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             logger.error(f"Houve um erro ao tentar acessar o arquivo em: \"{path_to_save}\"")
             sys.exit()
 
         try:
-            file.write(content_to_save)
+            file.write(json.dumps(content_to_save))
         except FileExistsError:
             logger.error(f"Houve um erro na tentativa de escrever no arquivo: \"{path_to_save}\"")
             sys.exit()
+
+        # Fecha o arquivo para ser salvo
+        file.close()
         
         time_end = time()
 

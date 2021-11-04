@@ -4,6 +4,7 @@ from classes.file import File
 from utils.setup_logger import logger
 
 from time import time
+from os.path import exists
 
 import sys
 
@@ -38,21 +39,38 @@ if __name__=='__main__':
     feature_list = []
 
     if cli.get_arg_from_cli('aat_feature'):
-        # Inicializa a classe AAT
-        aat = AAT()
 
-        # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
-        aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
+        # Guarda o path completo para salvar o arquivo
+        path_to_save = f"scale/{dataset_name}/aat_scale.txt"
+        
+        # Testa se o arquivo já existe, se sim, abre o arquivo, se não, salva o arquivo para que não precise ser gerado novamente se necessário
+        if not exists(path_to_save):
+            # Inicializa a classe AAT
+            aat = AAT()
+
+            # Realiza a criação dos arquivos com a escala AAT para as sequências passadas como parâmetro
+            aat_scale = aat.generate_aat_scale(positive_sequences, negative_sequences)
+
+
+            file_handler.save_dict_in_file(path_to_save, aat_scale)
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aat')
     
     if cli.get_arg_from_cli('aap_feature'):
-         # Inicializa a classe AAP
-        aap = AAP()
 
-        # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
-        aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
+        # Guarda o path completo para salvar o arquivo
+        path_to_save = f"scale/{dataset_name}/aap_scale.txt"
+
+        # Testa se o arquivo já existe, se sim, abre o arquivo, se não, salva o arquivo para que não precise ser gerado novamente se necessário
+        if not exists(path_to_save):
+             # Inicializa a classe AAP
+            aap = AAP()
+
+            # Realiza a criação dos arquivos com a escala AAP para as sequências passadas como parâmetro
+            aap_scale = aap.generate_aap_scale(positive_sequences, negative_sequences)
+
+            file_handler.save_dict_in_file(path_to_save, aap_scale)
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aap')
