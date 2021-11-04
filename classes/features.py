@@ -128,7 +128,7 @@ class AAT():
             count = 0
 
             # Iteração da sequência em uma janela deslizante de tamanho 3
-            for i in range(0, len(peptideo) - 2):
+            for i in range(0, len(peptideo) - 3):
                 try:
                     # Coleta o cálculo da escala de antigenicidade para determinada combinação de 3 aminoácidos.
                     score += float(aat_scale[peptideo[i:i + 3]])
@@ -276,7 +276,7 @@ class AAP():
             count = 0
 
             # Iteração da sequência em uma janela deslizante de tamanho 2
-            for i in range(0, len(peptideo) - 1):
+            for i in range(0, len(peptideo) - 2):
                 try:
                     # Coleta o cálculo da escala de antigenicidade para determinada combinação de 2 aminoácidos.
                     score += float(aap_scale[peptideo[i:i + 2]])
