@@ -1,18 +1,24 @@
 from classes.features import AAP, AAT
 from classes.command_line import Cli
 from classes.file import File
+from classes.model import Model
 from utils.setup_logger import logger
 
 from time import time
 from os.path import exists
 
 import sys
+import numpy as np
+
 
 # Definição para inicializar a Interface de linha de comando
 cli = Cli()
 
 # Definição para iniciar o manipulador de arquivos
 file_handler = File()
+
+# Defninição para iniciar a classe que irá definir o modelo
+model = Model()
 
 
 if __name__=='__main__':
@@ -31,7 +37,7 @@ if __name__=='__main__':
     positive_sequences = file_handler.get_sequences_from_file(positive_file)
     negative_sequences = file_handler.get_sequences_from_file(negative_file)
 
-    # Removação das variáveis que apontam para os arquivos de sequência
+    # Remoção das variáveis que apontam para os arquivos de sequência
     # A partir desse ponto do código, apenas as variáveis com as sequências serão utilizadas
     del positive_file
     del negative_file
@@ -39,6 +45,9 @@ if __name__=='__main__':
     feature_list = []
 
     dataset = positive_sequences + negative_sequences
+    target = [1] * len(positive_sequences) + [0] * len(negative_sequences)
+
+    features = np.empty([len(dataset), 1])
 
     if cli.get_arg_from_cli('aat_feature'):
 
@@ -68,9 +77,11 @@ if __name__=='__main__':
         # Extração da feature aat para cada peptídeo do dataset
         aat_feature = aat.extract_aat_feature(dataset, aat_scale)
 
+        features = np.column_stack((features, aat_feature))
+
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aat')
-    
+
     if cli.get_arg_from_cli('aap_feature'):
 
         # Guarda o path completo para o arquivo
@@ -99,12 +110,23 @@ if __name__=='__main__':
         # Extração da feature aap para cada peptídeo do dataset
         aap_feature = aap.extract_aap_feature(dataset, aap_scale)
 
+        features = np.column_stack((features, aap_feature))
+
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aap')
 
     if not len(feature_list):
         logger.error("Não foi selecionada nenhuma feature para treinamento do modelo. Programa será encerrado!")
         sys.exit()
+
+    logger.info(f"Features que estão sendo utilizadas para treinar o modelo: {feature_list}")
+
+    x, y = model.prepare_x_and_y(features, target)
+
+    grid_search = model.grid_search(x, target)
+
+    logger.info(grid_search.best_score_)
+    logger.info(grid_search.best_params_)
 
     time_end = time()
 
