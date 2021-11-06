@@ -2,6 +2,7 @@ from utils.setup_logger import logger
 from time import time
 
 import math
+import numpy as np
 
 class AAT():
     """ Classe Amino Acid Triplets (AAT)"""
@@ -109,7 +110,7 @@ class AAT():
         
         return aat_scale
 
-    def extract_aat_feature(self, dataset: list, aat_scale: dict) -> list:
+    def extract_aat_feature(self, dataset: list, aat_scale: dict) -> np.ndarray:
         """ Extraí a feature AAT para todo o dataset"""
 
         logger.info("Iniciando o calculo para extração da feature AAT do dataset")
@@ -151,8 +152,7 @@ class AAT():
         logger.debug(f"Tempo gasto em segundos para extrair a feature AAT do dataset: {time_end - time_init} segundos")
         logger.info("Finalizado o cálculo da feature AAT para o dataset.")
 
-        return feature_list
-
+        return np.array(feature_list)
 class AAP():
     """ Classe Amino Acid Pair (AAP)"""
 
@@ -257,7 +257,7 @@ class AAP():
         
         return aap_scale
 
-    def extract_aap_feature(self, dataset: list, aap_scale: dict) -> list:
+    def extract_aap_feature(self, dataset: list, aap_scale: dict) -> np.ndarray:
         """ Extraí a feature AAP para todo o dataset"""
 
         logger.info("Iniciando o calculo para extração da feature AAP do dataset")
@@ -299,4 +299,4 @@ class AAP():
         logger.debug(f"Tempo gasto em segundos para extrair a feature AAP do dataset: {time_end - time_init} segundos")
         logger.info("Finalizado o cálculo da feature AAP para o dataset.")
 
-        return feature_list
+        return np.array(feature_list)
