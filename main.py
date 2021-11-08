@@ -123,10 +123,30 @@ if __name__=='__main__':
 
     x, y = model.prepare_x_and_y(features, target)
 
-    grid_search = model.grid_search(x, target)
+    logger.info(f"Quantidade de features por peptídeo: {len(x[0])}")
 
-    logger.info(grid_search.best_score_)
-    logger.info(grid_search.best_params_)
+    grid_search = model.grid_search(x, target, cli.get_arg_from_cli('result_path'))
+
+    results = grid_search.cv_results_
+    bi = grid_search.best_index_
+
+    logger.info(f"Resultados obtidos em todos os treinamentos: {results}")
+
+    logger.info(  f"Melhores resultados: \n \
+                    roc_auc: {results['mean_test_auc_score'][bi]},\n \
+                    accuracy: {results['mean_test_accuracy'][bi]},\n  \
+                    precision +:{results['mean_test_scores_p_1'][bi]},\n \
+                    recall +:{results['mean_test_scores_r_1'][bi]},\n \
+                    f1 +:{results['mean_test_scores_f_1_1'][bi]},\n \
+                    precision -:{results['mean_test_scores_p_0'][bi]},\n \
+                    recall -:{results['mean_test_scores_r_0'][bi]},\n \
+                    f1 -:{results['mean_test_scores_f_1_0'][bi]},\n \
+                    precision_micro:{results['mean_test_precision_micro'][bi]},\n \
+                    f1 -:{results['mean_test_precision_macro'][bi]},\n \
+                    mcc -:{results['mean_test_mcc'][bi]}")
+
+    logger.info(f"Melhor score: {grid_search.best_score_}")
+    logger.info(f"Melhores parâmetros: {grid_search.best_params_}")
 
     time_end = time()
 

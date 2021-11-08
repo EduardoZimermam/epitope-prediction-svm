@@ -10,6 +10,7 @@ from utils.setup_logger import logger
 from time import time
 
 import numpy as np
+import pandas as pd
 
 class Model():
     """Classe que contém as definições do modelo de ML que será usado no projeto"""
@@ -71,8 +72,11 @@ class Model():
                                                      sample_weight=sample_weight)
         return f
     
-    def grid_search(self, x, y):
-        """Define o gridsearch para ser utilizado para valorar os melhores parâmetros para o modelo passado como parâmetro"""
+    def grid_search(self, x, y, path_csv_result=None):
+        """Define o gridsearch para ser utilizado para valorar os melhores parâmetros para o modelo passado como parâmetro
+
+            Utilizando o parâmetro path_csv_result o resultado completo do GridSearchCV será salvo no path fornecido
+        """
 
         logger.info("Iniciando GridSearchCV para o modelo")
 
@@ -111,10 +115,14 @@ class Model():
                                    cv=cross_valid,
                                    refit='auc_score',
                                    n_jobs=-1, 
-                                   verbose=3)
+                                   verbose=2)
 
     
         grid_search.fit(x, y)
+
+        results_dataframe = pd.DataFrame(data=grid_search.cv_results_)
+
+        results_dataframe.to_csv(path_csv_result)
 
         time_end = time()
 

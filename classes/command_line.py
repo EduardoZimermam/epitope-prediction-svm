@@ -19,6 +19,9 @@ class Cli():
         ap.add_argument("-d", "--dataset-name", required=True,
             help="Nome do dataset que está sendo usado para realizar o treinamento do modelo")
         
+        ap.add_argument("-r", "--result-path", required=True,
+            help="Caminho completo onde será salvo o resultado do GridSearchCV")
+        
         ap.add_argument("-at", "--aat-feature", action='store_true',
             help="Quando esse parâmetro está selecionado será utilizada a feature AAT (Amino Acid Triplets)")
         
