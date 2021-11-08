@@ -1,4 +1,4 @@
-from classes.features import AAP, AAT
+from classes.features import AAP, AAT, AAC
 from classes.command_line import Cli
 from classes.file import File
 from classes.model import Model
@@ -114,6 +114,19 @@ if __name__=='__main__':
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aap')
+
+    if cli.get_arg_from_cli('aac_feature'):
+
+        # Inicializa a classe AAC
+        aac = AAC()
+
+        # Extração da feature aac para cada peptídeo do dataset
+        aac_feature = aac.extract_aac_feature(dataset)
+
+        features = np.column_stack((features, aac_feature))
+
+        # Salvando a feature que será utilizada para treinar o modelo
+        feature_list.append('aac')
 
     if not len(feature_list):
         logger.error("Não foi selecionada nenhuma feature para treinamento do modelo. Programa será encerrado!")

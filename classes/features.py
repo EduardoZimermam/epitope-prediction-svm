@@ -1,6 +1,8 @@
 from utils.setup_logger import logger
 from time import time
 
+from pydpi.pypro import PyPro
+
 import math
 import numpy as np
 
@@ -298,5 +300,32 @@ class AAP():
 
         logger.debug(f"Tempo gasto em segundos para extrair a feature AAP do dataset: {time_end - time_init} segundos")
         logger.info("Finalizado o cálculo da feature AAP para o dataset.")
+
+        return np.array(feature_list)
+
+class AAC():
+    """Classe Amino Acid Composition"""
+
+    def __init__(self) -> None:
+        self.pypro = PyPro()
+
+    def extract_aac_feature(self, dataset: list) -> np.ndarray:
+
+        logger.info("Iniciando o calculo para extração da feature AAC do dataset")
+
+        time_init = time()
+
+        feature_list = []
+
+        for pep in dataset:
+            self.pypro.ReadProteinSequence(pep)
+            aac_feature = self.pypro.GetAAComp()
+            print(list(aac_feature.values()))
+            feature_list.append(list(aac_feature.values()))
+
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para extrair a feature AAC do dataset: {time_end - time_init} segundos")
+        logger.info("Finalizado o cálculo da feature AAC para o dataset.")
 
         return np.array(feature_list)

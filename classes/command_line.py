@@ -28,6 +28,9 @@ class Cli():
         ap.add_argument("-ap", "--aap-feature", action='store_true',
             help="Quando esse parâmetro está selecionado será utilizada a feature AAP (Amino Acid Pair)")
       
+        ap.add_argument("-ac", "--aac-feature", action='store_true',
+            help="Quando esse parâmetro está selecionado será utilizada a feature AAC (Amino Acid Composition)")
+
         args = vars(ap.parse_args())
 
         self.argparse = args
