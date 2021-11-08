@@ -130,8 +130,6 @@ if __name__=='__main__':
     results = grid_search.cv_results_
     bi = grid_search.best_index_
 
-    logger.info(f"Resultados obtidos em todos os treinamentos: {results}")
-
     logger.info(  f"Melhores resultados: \n \
                     roc_auc: {results['mean_test_auc_score'][bi]},\n \
                     accuracy: {results['mean_test_accuracy'][bi]},\n  \

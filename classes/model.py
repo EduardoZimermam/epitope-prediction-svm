@@ -120,6 +120,8 @@ class Model():
     
         grid_search.fit(x, y)
 
+        logger.info(f"Resultados obtidos em todos os treinamentos: {grid_search.cv_results_}")
+
         results_dataframe = pd.DataFrame(data=grid_search.cv_results_)
 
         results_dataframe.to_csv(path_csv_result)
