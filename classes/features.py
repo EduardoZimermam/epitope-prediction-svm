@@ -1,4 +1,5 @@
 from utils.setup_logger import logger
+from external_libraries.sequencelist_representation import SequenceKmerEmbRep
 from time import time
 
 from pydpi.pypro import PyPro
@@ -327,5 +328,26 @@ class AAC():
 
         logger.debug(f"Tempo gasto em segundos para extrair a feature AAC do dataset: {time_end - time_init} segundos")
         logger.info("Finalizado o cálculo da feature AAC para o dataset.")
+
+        return np.array(feature_list)
+
+class ProtVec():
+    """Classe ProtVec"""
+
+    def __init__(self) -> None:
+        pass
+
+    def extract_protvec_feature(self, dataset: list, path_to_binary: str) -> np.ndarray:
+
+        logger.info("Iniciando o calculo para extração da feature ProtVec do dataset")
+
+        time_init = time()
+
+        feature_list = SequenceKmerEmbRep(path_to_binary, dataset, 'protein', 4).embeddingX
+
+        time_end = time()
+
+        logger.debug(f"Tempo gasto em segundos para extrair a feature ProtVec do dataset: {time_end - time_init} segundos")
+        logger.info("Finalizado o cálculo da feature ProtVec para o dataset.")
 
         return np.array(feature_list)

@@ -1,4 +1,4 @@
-from classes.features import AAP, AAT, AAC
+from classes.features import AAP, AAT, AAC, ProtVec
 from classes.command_line import Cli
 from classes.file import File
 from classes.model import Model
@@ -127,6 +127,19 @@ if __name__=='__main__':
 
         # Salvando a feature que será utilizada para treinar o modelo
         feature_list.append('aac')
+    
+    if cli.get_arg_from_cli('protvec_feature'):
+
+        # Inicializa a classe AAC
+        protvec = ProtVec()
+
+        # Extração da feature aac para cada peptídeo do dataset
+        protvec_feature = protvec.extract_protvec_feature(dataset, "./protvec/sp_sequences_4mers_vec.bin")
+
+        features = np.column_stack((features, protvec_feature))
+
+        # Salvando a feature que será utilizada para treinar o modelo
+        feature_list.append('protvec')
 
     if not len(feature_list):
         logger.error("Não foi selecionada nenhuma feature para treinamento do modelo. Programa será encerrado!")

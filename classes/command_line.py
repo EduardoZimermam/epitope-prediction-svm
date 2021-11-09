@@ -31,6 +31,9 @@ class Cli():
         ap.add_argument("-ac", "--aac-feature", action='store_true',
             help="Quando esse parâmetro está selecionado será utilizada a feature AAC (Amino Acid Composition)")
 
+        ap.add_argument("-pv", "--protvec-feature", action='store_true',
+            help="Quando esse parâmetro está selecionado será utilizada a feature ProtVec")
+
         args = vars(ap.parse_args())
 
         self.argparse = args
