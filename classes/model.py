@@ -114,7 +114,7 @@ class Model():
                                    scoring=scoring, 
                                    cv=cross_valid,
                                    refit='auc_score',
-                                   n_jobs=-1, 
+                                   n_jobs=40, 
                                    verbose=2)
 
     
